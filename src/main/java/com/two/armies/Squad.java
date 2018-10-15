@@ -14,5 +14,6 @@ import org.immutables.value.Value;
 @Value.Immutable
 public interface Squad {
     String name();
+    Race race();
     int size();
 }

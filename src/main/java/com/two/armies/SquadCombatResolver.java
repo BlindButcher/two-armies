@@ -1,12 +1,5 @@
 package com.two.armies;
 
-import com.google.common.collect.DiscreteDomains;
-import com.google.common.collect.Range;
-
-import java.util.Random;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.two.armies.SquadSizeCategory.bySize;
 import static java.lang.String.format;
 
 /**
@@ -17,11 +10,17 @@ import static java.lang.String.format;
  */
 public class SquadCombatResolver {
     private static final String LOSS_MESSAGE = "Squad of %s lost %s";
-    private static final Random random = new Random();
+    private final PartitionCreator partitionCreator;
+
+
+    public SquadCombatResolver(PartitionCreator partitionCreator)
+    {
+        this.partitionCreator = partitionCreator;
+    }
 
     public SquadCombatResult apply(Squad first, Squad second) {
-        int firstSize = combatantsSize(first);
-        int secondSize = combatantsSize(second);
+        int firstSize = partitionCreator.attackPartition(first).count();
+        int secondSize = partitionCreator.attackPartition(second).count();
 
         ImmutableSquad newFirst = ImmutableSquad.copyOf(first).withSize(first.size() - secondSize);
         ImmutableSquad newSecond = ImmutableSquad.copyOf(second).withSize(second.size() - firstSize);
@@ -32,18 +31,5 @@ public class SquadCombatResolver {
                 .putMessages(newFirst, format(LOSS_MESSAGE, newFirst.name(), secondSize))
                 .putMessages(newSecond, format(LOSS_MESSAGE, newSecond.name(), firstSize))
                 .build();
-    }
-
-    private int combatantsSize(Squad squad) {
-        return squad.size() * randomInRange(bySize(squad.size()).percentInBattle) / 100;
-    }
-
-    public static int randomInRange(Range<Integer> range) {
-        checkArgument(range.hasLowerBound() && range.hasUpperBound(),
-                "Cannot select a random element from unbounded range %s", range);
-        Range<Integer> canonical = range.canonical(DiscreteDomains.integers());
-
-        return random.nextInt(canonical.upperEndpoint() - canonical.lowerEndpoint())
-                + canonical.lowerEndpoint();
     }
 }
