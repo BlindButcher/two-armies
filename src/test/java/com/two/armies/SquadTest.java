@@ -1,5 +1,7 @@
 package com.two.armies;
 
+import java.util.stream.Collectors;
+
 import org.junit.Test;
 
 /**
@@ -24,5 +26,7 @@ public class SquadTest {
         SquadCombatResult result = resolver.apply(squad1, squad2);
         System.out.println(result.first());
         System.out.println(result.second());
+
+        System.out.println(result.messages().values().stream().collect(Collectors.joining(System.lineSeparator())));
     }
 }
