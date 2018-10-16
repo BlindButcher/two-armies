@@ -14,7 +14,7 @@ public class SquadTest {
 
     @Test
     public void testSquad() {
-        SquadCombatResolver resolver = new SquadCombatResolver(new PartitionCreator(RandFunctions::randomInRange));
+        SquadCombatResolver resolver = new SquadCombatResolver(new PartitionCreator(RandFunctions::randomInRange), new SquadLossMerger());
 
         Squad squad1 = ImmutableSquad.builder().name("Human Infantry")
                 .race(ImmutableRace.builder().name("Human").discipline(10).build())
