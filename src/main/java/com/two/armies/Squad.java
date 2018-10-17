@@ -16,4 +16,9 @@ public interface Squad {
     String name();
     Race race();
     int size();
+
+    default boolean destroyed()
+    {
+        return size() <= 0;
+    }
 }
