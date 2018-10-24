@@ -30,7 +30,8 @@ public class PartitionCreator
         Range<Integer> sizeRange = bySize(squad.size()).percentInBattle;
         int discipline = squad.race().discipline();
 
-        Range<Integer> intersection = Ranges.closed(sizeRange.lowerEndpoint(), sizeRange.upperEndpoint() + discipline);
+        Range<Integer> intersection = Ranges.closed(sizeRange.lowerEndpoint(),
+                Math.min(100, sizeRange.upperEndpoint() + discipline));
 
         Preconditions.checkArgument(intersection.upperEndpoint() <= 100, "Squad partition no more than 100%");
 
